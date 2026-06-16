@@ -1,0 +1,11 @@
+training:
+  seed: 42
+  batch_size: 128
+  max_epochs: 60
+  learning_rate: 0.001
+  weight_decay: 0.00001
+  patience: 10
+  min_delta: 0.0001
+  gradient_clip: 1.0
+  device: "auto"
+  num_workers: 0

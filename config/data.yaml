@@ -1,0 +1,137 @@
+dataset:
+  name: "OEDI PVDAQ three-site 2011-2013 multisite study"
+  source_type: "local_multisite"
+  raw_dir: "data/raw/multisite"
+  processed_dir: "data/processed/multisite"
+  use_synthetic_data: false
+  allow_synthetic_for_unit_tests_only: true
+
+# Legacy single-site block retained for older scripts. The multisite pipeline
+# below uses the entries under `sites`.
+site:
+  site_id: "pvdaq_system_10"
+  name: "OEDI PVDAQ system 10 NREL CIS-1"
+  latitude: 39.7404
+  longitude: -105.1774
+  altitude: 1792.8
+  timezone: "America/Denver"
+  capacity_kw: 1.12
+  tilt: 40.0
+  azimuth: 180.0
+  module_parameters: null
+  inverter_parameters: null
+  temperature_model: "sapm"
+  allow_capacity_inference: false
+
+sites:
+  - site_id: "pvdaq_system_10"
+    name: "OEDI PVDAQ system 10 NREL CIS-1"
+    raw_dir: "data/raw/multisite/pvdaq_system_10"
+    local_files: []
+    latitude: 39.7404
+    longitude: -105.1774
+    altitude: 1792.8
+    timezone: "America/Denver"
+    capacity_kw: 1.12
+    tilt: 40.0
+    azimuth: 180.0
+    allow_capacity_inference: false
+    columns:
+      timestamp_col: "measured_on"
+      power_col: "ac_power__423"
+      power_scale_to_kw: 0.001
+      clear_sky_power_col: null
+  - site_id: "pvdaq_system_4"
+    name: "OEDI PVDAQ system 4 NREL x-Si-1"
+    raw_dir: "data/raw/multisite/pvdaq_system_4"
+    local_files: []
+    latitude: 39.7406
+    longitude: -105.1774
+    altitude: 1795.3
+    timezone: "America/Denver"
+    capacity_kw: 1.0
+    tilt: 40.0
+    azimuth: 180.0
+    allow_capacity_inference: false
+    columns:
+      timestamp_col: "measured_on"
+      power_col: "ac_power__315"
+      power_scale_to_kw: 0.001
+      clear_sky_power_col: null
+  - site_id: "pvdaq_system_34"
+    name: "OEDI PVDAQ system 34 Andre Agassi Building A"
+    raw_dir: "data/raw/multisite/pvdaq_system_34"
+    local_files: []
+    latitude: 36.1952
+    longitude: -115.1582
+    altitude: 620.0
+    timezone: "America/Los_Angeles"
+    capacity_kw: 146.64
+    tilt: 11.2
+    azimuth: 180.0
+    allow_capacity_inference: false
+    columns:
+      timestamp_col: "measured_on"
+      power_col: "ac_power_hw__2695"
+      # PVDAQ system 34 reports ac_power_hw in hectowatts.
+      power_scale_to_kw: 0.1
+      clear_sky_power_col: null
+
+columns:
+  timestamp_col: "measured_on"
+  power_col: "ac_power__423"
+  power_scale_to_kw: 0.001
+  clear_sky_power_col: null
+  ghi_col: null
+  dni_col: null
+  dhi_col: null
+  clear_sky_ghi_col: null
+  clear_sky_dni_col: null
+  clear_sky_dhi_col: null
+
+download:
+  urls: []
+  local_files: []
+  api_key_env: null
+
+nsrdb:
+  enabled: true
+  endpoint: "https://developer.nlr.gov/api/nsrdb/v2/solar/nsrdb-GOES-aggregated-v4-0-0-download.csv"
+  raw_dir: "data/raw/nsrdb"
+  api_key_env: "NSRDB_API_KEY"
+  email_env: "NSRDB_EMAIL"
+  attributes: ["air_temperature", "wind_speed"]
+  interval_minutes: 30
+  years: [2011, 2012, 2013]
+  # Adjacent UTC years provide complete local-time coverage at year boundaries.
+  support_years: [2010, 2011, 2012, 2013, 2014]
+  leap_day: false
+  utc: true
+
+preprocessing:
+  resample_rule: "15min"
+  daylight_method: "solar_zenith"
+  solar_zenith_max_degrees: 85.0
+  x_max: 1.2
+  missing_strategy: "interpolate_short_gaps"
+  max_interpolation_gap: 3
+
+ramp:
+  window_steps: 1
+  thresholds: [0.03, 0.05, 0.10, 0.15, 0.20]
+
+split:
+  strategy: "by_year"
+  years: [2011, 2012, 2013]
+  required_years: 3
+  train_years: 2
+  test_years: 1
+  validation_fraction_from_train_period: 0.15
+  train: 0.70
+  validation: 0.15
+  test: 0.15
+
+window:
+  history_steps: 16
+  forecast_steps: 16
+  stride: 1

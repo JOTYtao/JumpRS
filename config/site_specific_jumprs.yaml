@@ -1,0 +1,24 @@
+selection_protocol:
+  split: "chronological_validation_only"
+  metric_scope: "per_site"
+  cross_site_metric_averaging: false
+  held_out_test_evaluated: false
+
+sites:
+  pvdaq_system_4:
+    strategy: "single_site_model"
+    candidate: "h66_site4_equal"
+    training_scope: "pvdaq_system_4_only"
+    adaptive_loss_strength: 0.0
+  pvdaq_system_10:
+    strategy: "linear_pool"
+    candidates:
+      h70_site10_half: 0.7
+      h71_site10_full: 0.3
+    training_scope: "pvdaq_system_10_only"
+  pvdaq_system_34:
+    strategy: "linear_pool"
+    candidates:
+      h56_markov_hybrid: 0.7
+      h63_gradshrink025: 0.3
+    training_scope: "shared_multisite"
