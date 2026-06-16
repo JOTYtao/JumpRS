@@ -220,26 +220,6 @@ python -m src.visualization.paper_figures
 
 Metrics and figures are local generated outputs and are not uploaded by default.
 
-## Tests
 
-Run the focused unit test suite:
-
-```bash
-python -m pytest
-```
-
-Synthetic data is allowed only inside unit tests for code-shape and numerical
-stability checks.
-
-## GitHub Upload
-
-This repository is prepared for:
-
-```bash
-git remote add origin git@github.com:JOTYtao/JumpRS.git
-git push -u origin main
-```
-
-Only code, configuration, scripts, tests, and lightweight documentation should
 be committed. Keep real datasets, prediction archives, manuscript files, and
 large model binaries out of normal Git history.
